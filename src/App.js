@@ -1,10 +1,10 @@
-import React from 'react';
-
+import React from "react";
+import { JsonConverter } from "./components/JsonConverter/JsonConverter";
 
 function App() {
   return (
-    <div>
-     
+    <div style={{padding:'1rem'}}>
+      <JsonConverter />
     </div>
   );
 }
