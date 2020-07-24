@@ -1,10 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
 import * as firebaseConfig from "../config/FirebaseConifg";
 import * as firebase from "firebase";
+import { useToasts } from "react-toast-notifications";
 import "./JsonConverter.css";
 
 export function JsonConverter() {
+  const [buttonText, setButtonText] = useState(
+    "Convert Data to JSON and Upload to Cloud"
+  );
+  const uploadedText='Data uploaded, Click to override and upload new data';
+  const { addToast } = useToasts();
   const fetchCsv = () => {
     return fetch("/data/tests-data.csv").then(function(response) {
       let reader = response.body.getReader();
@@ -22,10 +28,16 @@ export function JsonConverter() {
       complete: result => {
         const jsonStr = csvJSON(result);
         let jsonObj = JSON.parse(jsonStr);
-        firebase
-          .database()
-          .ref("funds/")
-          .set(jsonObj);
+        try {
+          firebase
+            .database()
+            .ref("funds/")
+            .set(jsonObj);
+            setButtonText(uploadedText);
+          addToast("Data uploaded successfully.", { appearance: "success", autoDismiss : true });
+        } catch (err) {
+          addToast(err.message, { appearance: "error" });
+        }
       }
     });
   };
@@ -53,12 +65,22 @@ export function JsonConverter() {
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig.firebaseConfig);
     }
+
+    let dbRef = firebase.database().ref("funds/");
+    dbRef.remove();
+    dbRef.once("value", snapshot => {
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        console.log("exists!", userData);
+        setButtonText(uploadedText);
+      }
+    });
   }, []);
 
   return (
     <>
       <button className="button-upload" onClick={() => getCsvData()}>
-        Convert Data to JSON and Upload to Cloud
+        {buttonText}
       </button>
     </>
   );

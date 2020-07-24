@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import * as firebaseConfig from "../config/FirebaseConifg";
 import * as firebase from "firebase";
-//import "./JsonConverter.css";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import moment from "moment";
 
+
 export function FundsView() {
-  const [rowData, setRowData] = useState([]);
+  const [rowData, setRowData] = useState(null);
   const [columnDefs] = useState([
     {
       headerName: "Fund",
@@ -87,7 +87,7 @@ export function FundsView() {
   };
 
   const reportStatusStyle = params => {
-    if (params.value === "True") return { color: "green" };
+    if (params.value === "True") return { color: "#00b300" };
     else return { color: "red" };
   };
 
