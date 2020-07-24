@@ -66,8 +66,7 @@ export function JsonConverter() {
       firebase.initializeApp(firebaseConfig.firebaseConfig);
     }
 
-    let dbRef = firebase.database().ref("funds/");
-    dbRef.remove();
+    let dbRef = firebase.database().ref("funds/");    
     dbRef.once("value", snapshot => {
       if (snapshot.exists()) {
         const userData = snapshot.val();

@@ -1,7 +1,7 @@
 import React from "react";
 import { JsonConverter } from "./components/JsonConverter/JsonConverter";
 import { FundsView } from "./components/Funds/FundsView";
-import { ToastProvider, useToasts } from 'react-toast-notifications';
+import { ToastProvider } from 'react-toast-notifications';
 
 function App() {
   return (
