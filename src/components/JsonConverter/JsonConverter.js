@@ -50,7 +50,9 @@ export function JsonConverter() {
   };
 
   useEffect(() => {
-    firebase.initializeApp(firebaseConfig.firebaseConfig);
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig.firebaseConfig);
+    }
   }, []);
 
   return (
@@ -58,7 +60,6 @@ export function JsonConverter() {
       <button className="button-upload" onClick={() => getCsvData()}>
         Convert Data to JSON and Upload to Cloud
       </button>
-      <div></div>
     </>
   );
 }
