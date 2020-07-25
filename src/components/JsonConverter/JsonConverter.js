@@ -9,7 +9,8 @@ export function JsonConverter() {
   const [buttonText, setButtonText] = useState(
     "Convert Data to JSON and Upload to Cloud"
   );
-  const uploadedText='Data uploaded, Click to override and upload new data';
+
+  const uploadedText = "Data uploaded, Click to override and upload new data";
   const { addToast } = useToasts();
   const fetchCsv = () => {
     return fetch("/data/tests-data.csv").then(function(response) {
@@ -23,6 +24,7 @@ export function JsonConverter() {
   };
 
   const getCsvData = async () => {
+    setButtonText("Loading...");
     let csvData = await fetchCsv();
     Papa.parse(csvData, {
       complete: result => {
@@ -33,10 +35,14 @@ export function JsonConverter() {
             .database()
             .ref("funds/")
             .set(jsonObj);
-            setButtonText(uploadedText);
-          addToast("Data uploaded successfully.", { appearance: "success", autoDismiss : true });
+          setButtonText(uploadedText);
+          addToast("Data uploaded successfully.", {
+            appearance: "success",
+            autoDismiss: true
+          });          
         } catch (err) {
-          addToast(err.message, { appearance: "error" });
+          addToast(err.message, { appearance: "error" });    
+          setButtonText(uploadedText);      
         }
       }
     });
@@ -66,11 +72,9 @@ export function JsonConverter() {
       firebase.initializeApp(firebaseConfig.firebaseConfig);
     }
 
-    let dbRef = firebase.database().ref("funds/");    
+    let dbRef = firebase.database().ref("funds/");
     dbRef.once("value", snapshot => {
       if (snapshot.exists()) {
-        const userData = snapshot.val();
-        console.log("exists!", userData);
         setButtonText(uploadedText);
       }
     });
@@ -80,7 +84,7 @@ export function JsonConverter() {
     <>
       <button className="button-upload" onClick={() => getCsvData()}>
         {buttonText}
-      </button>
+      </button>     
     </>
   );
 }

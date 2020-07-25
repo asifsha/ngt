@@ -21,7 +21,7 @@ export function FundsView() {
     {
       headerName: "Share Class",
       field: "share_class_name",
-      minwidth: 300
+      minWidth: 300
     },
     {
       headerName: "Date",
